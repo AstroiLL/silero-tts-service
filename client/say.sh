@@ -32,6 +32,7 @@ case "$OUT" in
     *) FMT=wav ;;
 esac
 
+BASE=${SILERO_TTS_URL%/}; BASE=${BASE%/v1}     # адрес можно писать и с /v1, и без
 BODY=$(mktemp "${TMPDIR:-/tmp}/stts_XXXXXX.json")
 trap 'rm -f "$BODY"' EXIT
 if [ "$IN" = "-" ]; then IN=/dev/stdin; fi
@@ -45,7 +46,7 @@ PY
 
 CODE=$(curl -sS -o "$OUT" -w '%{http_code}' --max-time 300 \
     -H "Authorization: Bearer $SILERO_TTS_KEY" -H 'Content-Type: application/json' \
-    --data-binary @"$BODY" "${SILERO_TTS_URL%/}/v1/audio/speech")
+    --data-binary @"$BODY" "$BASE/v1/audio/speech")
 if [ "$CODE" != 200 ]; then
     echo "silero-tts-service: HTTP $CODE: $(head -c 300 "$OUT" 2>/dev/null)" >&2
     rm -f "$OUT"

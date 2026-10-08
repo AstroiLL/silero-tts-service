@@ -91,6 +91,29 @@ curl -s http://127.0.0.1:7470/health        # {"ok":true,"model":"v5_5_ru","voic
 Команда `add` печатает токен **один раз**. Сразу запиши его в конфиг клиента (шаг 6). Имя токена
 видно в журнале сервиса: так понятно, кто сколько озвучивает.
 
+### Указатель на сервис: `client.env`
+
+Стандартное место, где клиент хранит адрес сервиса и свой токен: файл
+`~/.config/silero-tts/client.env` (права 600) у того пользователя, от имени которого работает клиент.
+```
+SILERO_TTS_URL=http://<хост сервиса>:7470
+SILERO_TTS_KEY=stts_…
+```
+Его читают `client/say.sh` и [Чуйко](https://github.com/AstroiLL/chuyko). Чуйко подключается к сервису
+сам, если в его `.env` пустой `TTS_URL`. Удобно так: владелец сервиса выдаёт токен и сразу кладёт файл на
+машину клиента. Тогда токен никуда не копируется вручную и не светится в чате:
+```sh
+# на машине с сервисом; <клиент> — ssh-адрес машины и пользователя, кому выдаём доступ
+T=$(.venv/bin/python tokens.py add <машина>-<пользователь> 2>/dev/null)
+printf 'SILERO_TTS_URL=http://<адрес этого сервера в сети>:7470\nSILERO_TTS_KEY=%s\n' "$T" | \
+  ssh <клиент> 'umask 077; mkdir -p ~/.config/silero-tts && cat > ~/.config/silero-tts/client.env'
+unset T
+ssh <клиент> '. ~/.config/silero-tts/client.env && curl -s -o /dev/null -w "%{http_code}\n" \
+  "$SILERO_TTS_URL/v1/audio/voices" -H "Authorization: Bearer $SILERO_TTS_KEY"'      # 200
+```
+Для этого `SILERO_HOST=0.0.0.0` (шаг 2). Один токен на машину и пользователя — нормально: им пользуются
+все его клиенты (Чуйко, `say.sh`). Если нужно различать клиенты в журнале, выдай каждому свой токен.
+
 Проверка:
 ```sh
 curl -s -o /tmp/stts.ogg -w '%{http_code}\n' http://127.0.0.1:7470/v1/audio/speech \
