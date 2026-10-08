@@ -1,0 +1,8 @@
+.env
+.venv
+models
+tokens.json
+tokens.tmp
+lexicon.local.json
+__pycache__/
+*.pyc

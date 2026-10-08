@@ -1,0 +1,20 @@
+# Вариант A: user-сервис одного пользователя (root не нужен).
+# Другие пользователи этого сервера ходят на 127.0.0.1:7470 со своими токенами.
+#   mkdir -p ~/.config/systemd/user
+#   sed "s|@DIR@|$PWD|g" deploy/silero-tts.service > ~/.config/systemd/user/silero-tts.service
+#   systemctl --user daemon-reload && systemctl --user enable --now silero-tts
+#   loginctl enable-linger $USER    # чтобы работал без входа в систему
+[Unit]
+Description=silero-tts-service — shared Silero TTS (OpenAI-compatible API)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=@DIR@
+ExecStart=@DIR@/.venv/bin/python @DIR@/server.py
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

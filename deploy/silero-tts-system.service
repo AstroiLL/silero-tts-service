@@ -1,0 +1,29 @@
+# Вариант B: системный сервис от отдельного пользователя silero-tts (нужен root).
+# Не зависит ни от чьей учётки: правильный выбор для сервера с несколькими пользователями.
+#   sudo useradd --system --home-dir /opt/silero-tts-service --shell /usr/sbin/nologin silero-tts
+#   sudo git clone <repo> /opt/silero-tts-service && sudo chown -R silero-tts: /opt/silero-tts-service
+#   cd /opt/silero-tts-service && sudo -u silero-tts ./install.sh
+#   sudo cp deploy/silero-tts-system.service /etc/systemd/system/silero-tts.service
+#   sudo systemctl daemon-reload && sudo systemctl enable --now silero-tts
+[Unit]
+Description=silero-tts-service — shared Silero TTS (OpenAI-compatible API)
+After=network-online.target
+
+[Service]
+Type=simple
+User=silero-tts
+Group=silero-tts
+WorkingDirectory=/opt/silero-tts-service
+ExecStart=/opt/silero-tts-service/.venv/bin/python /opt/silero-tts-service/server.py
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1 HOME=/opt/silero-tts-service
+# Песочница: сервису нужен только свой каталог.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/silero-tts-service
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

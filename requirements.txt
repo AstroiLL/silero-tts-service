@@ -1,0 +1,4 @@
+# torch ставится отдельно (CPU-сборка), см. install.sh
+fastapi>=0.110
+uvicorn[standard]>=0.29
+numpy>=1.26
