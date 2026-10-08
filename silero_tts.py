@@ -147,7 +147,9 @@ class Engine:
 
     def load(self):
         if self._model is None:
+            import warnings
             import torch
+            warnings.filterwarnings("ignore", category=SyntaxWarning)  # шум из кода внутри модели
             torch.set_num_threads(self.threads)
             m = torch.package.PackageImporter(str(ensure_model(self.model_name))).load_pickle(
                 "tts_models", "model")
