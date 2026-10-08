@@ -43,22 +43,16 @@ GPU не нужен. На обычном CPU фраза озвучивается
 
 ## 3. Скачать и установить
 
-Если репозиторий приватный, пользователь даст файл ключа только для чтения (deploy key):
-```sh
-install -m 600 <файл ключа> ~/.ssh/silero-tts_deploy
-export GIT_SSH_COMMAND='ssh -i ~/.ssh/silero-tts_deploy -o IdentitiesOnly=yes'
-```
-
 **Режим A:**
 ```sh
-cd ~ && git clone git@github.com:AstroiLL/silero-tts-service.git && cd silero-tts-service
+cd ~ && git clone https://github.com/AstroiLL/silero-tts-service.git && cd silero-tts-service
 ./install.sh          # venv, torch CPU, зависимости, .env, модель (~140 МБ); 1–3 минуты
 ```
 
 **Режим B** (от root):
 ```sh
 useradd --system --home-dir /opt/silero-tts-service --shell /usr/sbin/nologin silero-tts
-git clone git@github.com:AstroiLL/silero-tts-service.git /opt/silero-tts-service
+git clone https://github.com/AstroiLL/silero-tts-service.git /opt/silero-tts-service
 chown -R silero-tts: /opt/silero-tts-service
 cd /opt/silero-tts-service && sudo -u silero-tts ./install.sh
 ```
