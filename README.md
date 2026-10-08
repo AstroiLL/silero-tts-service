@@ -53,17 +53,24 @@ curl http://127.0.0.1:7470/v1/audio/speech -H "Authorization: Bearer $TOKEN" \
 
 В репозитории их нет, они скачиваются при установке:
 
-- [Silero Models](https://github.com/snakers4/silero-models) — модели синтеза русской речи, © Silero Team
-  (условия использования моделей — в их репозитории).
+- [Silero Models](https://github.com/snakers4/silero-models) — модели синтеза русской речи, © Silero Team.
 - [PyTorch](https://pytorch.org), [FastAPI](https://fastapi.tiangolo.com), [Uvicorn](https://www.uvicorn.org),
   [FFmpeg](https://ffmpeg.org).
+
+## ⚠️ Лицензия моделей Silero
+
+Код этого сервиса распространяется под MIT, а **модели Silero — нет.** Русские модели (`v5_5_ru` и др.)
+опубликованы под [CC BY-NC 4.0](https://github.com/snakers4/silero-models/blob/master/LICENSE):
+их можно использовать бесплатно в **некоммерческих** целях с указанием авторства. Для коммерческого
+использования нужна лицензия Silero: [hello@silero.ai](mailto:hello@silero.ai). Модели скачиваются
+с серверов Silero при установке, в репозитории их нет.
 
 ## Автор и лицензия
 
 Илья Брызгалов (Ilya Byven) aka [@AstroiLL](https://github.com/AstroiLL) — [astroill.info](https://astroill.info)
 
-Лицензия [MIT](LICENSE): можно использовать как угодно, в том числе в коммерческих целях,
-сохраняя упоминание автора.
+Код — [MIT](LICENSE): можно использовать как угодно, в том числе в коммерческих целях,
+сохраняя упоминание автора. Модели Silero — по их собственной лицензии (см. выше).
 
 ---
 
